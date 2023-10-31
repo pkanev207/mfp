@@ -14,7 +14,7 @@ const prodConfig = {
     filename: "[name].[contenthash].js",
     // publicPath: "/container/latest/"
     // path: path.resolve(__dirname, "../dist"),
-    publicPath: path.resolve(__dirname, "../dist"),
+    publicPath: path.resolve(__dirname, "../dist/"),
   },
   plugins: [
     new ModuleFederationPlugin({
@@ -23,6 +23,7 @@ const prodConfig = {
         // marketing: `marketing@${domain}/marketing/remoteEntry.js`,
         marketing: "marketing@http://localhost:8081/remoteEntry.js",
       },
+      // hence the many loaded js files in the browser
       shared: packageJson.dependencies,
     }),
   ],

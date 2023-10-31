@@ -1,4 +1,5 @@
 import React from "react";
+import { BrowserRouter } from "react-router-dom";
 // marketing means go and get that remote entry file
 // we are importing a very generic function and not a React component,
 //  because container shouldn't assume that a child
@@ -7,13 +8,17 @@ import React from "react";
 // near zero coupling
 // import { mount } from "marketing/MarketingApp";
 import MarketingApp from "./components/marketingApp.js";
+import Header from "./components/Header.js";
 
 export default () => {
   return (
-    <div>
-      <h1>Hi, from the container!</h1>
-      <hr />
-      <MarketingApp />
-    </div>
+    <BrowserRouter>
+      <div>
+        <Header />
+        <h1>Hi, from the container!</h1>
+        <hr />
+        <MarketingApp />
+      </div>
+    </BrowserRouter>
   );
 };
