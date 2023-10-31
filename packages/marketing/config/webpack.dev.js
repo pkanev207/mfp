@@ -1,5 +1,5 @@
 const { merge } = require("webpack-merge");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+// const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 const commonConfig = require("./webpack.common");
 const packageJson = require("../package.json");
@@ -13,6 +13,7 @@ const devConfig = {
     },
   },
   plugins: [
+    // new HtmlWebpackPlugin({ template: "./public/index.html" }),
     new ModuleFederationPlugin({
       // Webpack is gonna declare a global variable with that name
       name: "marketing",
@@ -25,7 +26,6 @@ const devConfig = {
       // shared: ["react", "react-dom"],
       shared: packageJson.dependencies,
     }),
-    new HtmlWebpackPlugin({ template: "./public/index.html" }),
   ],
 };
 // devConfig is gonna to override or take priority over similar set ups
