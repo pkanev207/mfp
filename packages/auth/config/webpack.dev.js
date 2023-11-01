@@ -1,4 +1,5 @@
 const { merge } = require("webpack-merge");
+// const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ModuleFederationPlugin = require("webpack/lib/container/ModuleFederationPlugin");
 const commonConfig = require("./webpack.common");
 const packageJson = require("../package.json");
@@ -6,23 +7,23 @@ const packageJson = require("../package.json");
 const devConfig = {
   mode: "development",
   devServer: {
-    port: 8080,
+    port: 8082,
     // historyApiFallback: true,
     historyApiFallback: {
       index: "/index.html",
     },
   },
   plugins: [
+    // new HtmlWebpackPlugin({ template: "./public/index.html" }),
     new ModuleFederationPlugin({
-      // this name never actually gets used for anything
-      name: "container",
-      remotes: {
-        // if we write import statement inside our container
-        // and ask for something called "marketing" - it will be on that remote entry file
-        marketing: "marketing@http://localhost:8081/remoteEntry.js",
+      // Webpack is gonna declare a global variable with that name
+      name: "auth",
+      filename: "remoteEntry.js",
+      // designate which file we want to make available to the outside world
+      exposes: {
+        // whenever someone asks for this - we give him that... bootstrap.js
+        "./AuthApp": "./src/bootstrap",
       },
-      // If we want to be specific about the versions and the exact modules - we don't use this shortcut
-      // with package.json, instead we write each one
       // shared: ["react", "react-dom"],
       shared: packageJson.dependencies,
     }),
