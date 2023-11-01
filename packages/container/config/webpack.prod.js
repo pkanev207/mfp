@@ -12,9 +12,15 @@ const prodConfig = {
     // for caching issues
     // all the files will use this as a template to figure out how to name them:
     filename: "[name].[contenthash].js",
+    // tf is that?
+    // Browser tries to load this script by taking current domain + path and adding "main.js" onto the end
+    // <script src="main.js"></script>
+    // we need http://localhost:8082/main.js - Path can be customized by adding a publicPath
     // publicPath: "/container/latest/"
-    // path: path.resolve(__dirname, "../dist"),
-    publicPath: path.resolve(__dirname, "../dist/"),
+    path: path.resolve(__dirname, "../dist"),
+    publicPath: "http://localhost:8080/",
+    // if publicPath is never set, scripts are loaded up from the remoteEntry.js file
+    // relative to the URL that we loaded remoteEntry.js from!
   },
   plugins: [
     new ModuleFederationPlugin({

@@ -5,12 +5,18 @@ const packageJson = require("../package.json");
 
 const devConfig = {
   mode: "development",
+  output: {
+    publicPath: "http://localhost:8080/",
+  },
   devServer: {
     port: 8080,
-    // historyApiFallback: true,
     historyApiFallback: {
       index: "/index.html",
     },
+    // historyApiFallback: true,
+    // historyApiFallback: {
+    //   historyApiFallback: true,
+    // },
   },
   plugins: [
     new ModuleFederationPlugin({
@@ -19,6 +25,7 @@ const devConfig = {
       remotes: {
         // if we write import statement inside our container
         // and ask for something called "marketing" - it will be on that remote entry file
+        auth: "auth@http://localhost:8082/remoteEntry.js",
         marketing: "marketing@http://localhost:8081/remoteEntry.js",
       },
       // If we want to be specific about the versions and the exact modules - we don't use this shortcut

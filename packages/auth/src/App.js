@@ -5,8 +5,8 @@ import {
   createGenerateClassName,
 } from "@material-ui/core/styles";
 
-import SignIn from "./components/Signin.js";
-import SignUp from "./components/Signup.js";
+import SignIn from "./components/Signin";
+import SignUp from "./components/Signup";
 
 const generateClassName = createGenerateClassName({
   productionPrefix: "au",
@@ -15,15 +15,14 @@ const generateClassName = createGenerateClassName({
 export default ({ history }) => {
   return (
     <div>
-      {/* we should replace Browser History with Memory History - just Router */}
-      <Router history={history}>
-        <StylesProvider generateClassName={generateClassName}>
+      <StylesProvider generateClassName={generateClassName}>
+        <Router history={history}>
           <Switch>
             <Route path="/auth/signin" component={SignIn} />
             <Route path="/auth/signup" component={SignUp} />
           </Switch>
-        </StylesProvider>
-      </Router>
+        </Router>
+      </StylesProvider>
     </div>
   );
 };

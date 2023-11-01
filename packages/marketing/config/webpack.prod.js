@@ -12,10 +12,10 @@ const prodConfig = {
   },
   plugins: [
     // although identical with webpack.dev, in future there might be some differences
-    new ModuleFederationPlugin({  
+    new ModuleFederationPlugin({
       name: "marketing",
       filename: "remoteEntry.js",
-      exposes: { "./MarketingApp": "./src/bootstrap" },
+      exposes: { "./": "./src/bootstrap" },
       shared: packageJson.dependencies,
     }),
   ],

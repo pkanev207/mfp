@@ -1,17 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom";
-// React-router-dom eternally uses history library:
+// React-router-dom eternally uses npm history library:
 import { createMemoryHistory, createBrowserHistory } from "history";
 import App from "./App";
 
 // Mount function to start up the app
-const mount = (el, { onNavigate, defaultHistory }) => {
-  const history = defaultHistory || createMemoryHistory();
+const mount = (el, { onNavigate, defaultHistory, initialPath }) => {
+  const history =
+    defaultHistory || createMemoryHistory({ initialEntries: [initialPath] });
+
   if (onNavigate) {
     // build in method in the history object, will call whatever function we provide,
     // whenever the url changes - we want to call that cb
     history.listen(onNavigate);
-  }
+  }  
 
   ReactDOM.render(<App history={history} />, el);
   // to have some kind of communication from our container - object with cbs

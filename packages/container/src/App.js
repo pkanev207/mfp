@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter } from "react-router-dom";
+import React, { lazy, Suspense } from "react";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import {
   StylesProvider,
   createGenerateClassName,
@@ -11,8 +11,13 @@ import {
 // any necessary communication is done with callbacks or simple events
 // near zero coupling
 // import { mount } from "marketing/MarketingApp";
-import MarketingApp from "./components/marketingApp.js";
 import Header from "./components/Header.js";
+import Progress from "./components/Progress.js";
+// import AuthApp from "./components/AuthApp.js";
+// import MarketingApp from "./components/MarketingApp.js";
+const AuthLazy = lazy(() => import("./components/AuthApp"));
+const MarketingLazy = lazy(() => import("./components/MarketingApp"));
+
 // for production only:
 const generateClassName = createGenerateClassName({
   productionPrefix: "co",
@@ -34,7 +39,12 @@ export default () => {
           <Header />
           <h1>Hi, from the container!</h1>
           <hr />
-          <MarketingApp />
+          <Suspense fallback={<Progress />}>
+            <Switch>
+              <Route path="/auth" component={AuthLazy} />
+              <Route path="/" component={MarketingLazy} />
+            </Switch>
+          </Suspense>
         </div>
       </StylesProvider>
     </BrowserRouter>
@@ -43,3 +53,13 @@ export default () => {
 
 // Anytime we are using the same css library into production - chances are they are gonna
 // make the same selectors in the different microservices and mix and match them into a style collision
+
+// Already included file name
+// 'c:/Users/a1bg521154/Desktop/Test/Microfrontends with React/mfp/packages/container/src/components/MarketingApp.js'
+//  differs from file name
+//  'c:/Users/a1bg521154/Desktop/Test/Microfrontends with React/mfp/packages/container/src/components/marketingApp.js'
+//   only in casing.
+//   The file is in the program because:
+//     Imported via "./components/MarketingApp.js" z
+//     from file 'c:/Users/a1bg521154/Desktop/Test/Microfrontends with React/mfp/packages/container/src/App.js'
+//     Root file specified for compilation
