@@ -27,6 +27,7 @@ const devConfig = {
         // and ask for something called "marketing" - it will be on that remote entry file
         auth: "auth@http://localhost:8082/remoteEntry.js",
         marketing: "marketing@http://localhost:8081/remoteEntry.js",
+        dashboard: "dashboard@http://localhost:8083/remoteEntry.js",
       },
       // If we want to be specific about the versions and the exact modules - we don't use this shortcut
       // with package.json, instead we write each one

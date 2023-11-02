@@ -26,8 +26,10 @@ const prodConfig = {
     new ModuleFederationPlugin({
       name: "container",
       remotes: {
+        auth: "auth@http://localhost:8082/remoteEntry.js",
         // marketing: `marketing@${domain}/marketing/remoteEntry.js`,
         marketing: "marketing@http://localhost:8081/remoteEntry.js",
+        dashboard: "dashboard@http://localhost:8083/remoteEntry.js",
       },
       // hence the many loaded js files in the browser
       shared: packageJson.dependencies,

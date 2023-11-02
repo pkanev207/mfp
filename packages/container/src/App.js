@@ -1,9 +1,17 @@
-import React, { lazy, Suspense, useState } from "react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import React, { lazy, Suspense, useState, useEffect } from "react";
+import {
+  BrowserRouter,
+  Router,
+  Route,
+  Redirect,
+  Switch,
+} from "react-router-dom";
 import {
   StylesProvider,
   createGenerateClassName,
 } from "@material-ui/core/styles";
+import { createBrowserHistory } from "history";
+
 // marketing means go and get that remote entry file
 // we are importing a very generic function and not a React component,
 //  because container shouldn't assume that a child
@@ -17,6 +25,7 @@ import Progress from "./components/Progress.js";
 // import MarketingApp from "./components/MarketingApp.js";
 const AuthLazy = lazy(() => import("./components/AuthApp"));
 const MarketingLazy = lazy(() => import("./components/MarketingApp"));
+const DashboardLazy = lazy(() => import("./components/DashboardApp"));
 
 // for production only:
 const generateClassName = createGenerateClassName({
@@ -26,15 +35,27 @@ const generateClassName = createGenerateClassName({
 // and keep all those History objects in sync
 // otherwise we can have some nasty bugs due to race conditions -
 // different Browser Histories are implemented differently in various libraries
+
+// creating history manually:
+const history = createBrowserHistory();
+
 export default () => {
   const [isSignedIn, setIsSignedIn] = useState(false);
+
+  useEffect(() => {
+    if (isSignedIn) {
+      history.push("/dashboard");
+    }
+  }, [isSignedIn]);
 
   return (
     // BrowseRouter also creates Browser History object behind the scene
     // When we go to localhost://8080/ we create to separate objects of history - Browser and Memory
     // with initial values stored inside them = '/'. Memory initial store is '/' no matter what
     // Links correspond to the parent router - kind of scoped in nature
-    <BrowserRouter>
+    // <BrowserRouter>
+    // generic router:
+    <Router history={history}>
       {/* in order to generate css classes in a slightly more randomize fashion */}
       <StylesProvider generateClassName={generateClassName}>
         <div>
@@ -57,6 +78,12 @@ export default () => {
                   }}
                 />
               </Route>
+              {/* Important: put above marketing because route "/" will be matched first */}
+              {/* <Route path="/dashboard" component={DashboardLazy} /> */}
+              <Route path="/dashboard">
+                {!isSignedIn && <Redirect to="/" />}
+                <DashboardLazy />
+              </Route>
               <Route path="/">
                 <MarketingLazy isSignedIn={isSignedIn} />
               </Route>
@@ -64,19 +91,15 @@ export default () => {
           </Suspense>
         </div>
       </StylesProvider>
-    </BrowserRouter>
+    </Router>
+    // </BrowserRouter>
   );
 };
 
 // Anytime we are using the same css library into production - chances are they are gonna
 // make the same selectors in the different microservices and mix and match them into a style collision
 
-// Already included file name
-// 'c:/Users/a1bg521154/Desktop/Test/Microfrontends with React/mfp/packages/container/src/components/MarketingApp.js'
-//  differs from file name
-//  'c:/Users/a1bg521154/Desktop/Test/Microfrontends with React/mfp/packages/container/src/components/marketingApp.js'
-//   only in casing.
-//   The file is in the program because:
-//     Imported via "./components/MarketingApp.js" z
-//     from file 'c:/Users/a1bg521154/Desktop/Test/Microfrontends with React/mfp/packages/container/src/App.js'
-//     Root file specified for compilation
+// const history = useHistory();
+// const handleGoBack = () => {
+//   history.goBack();
+// };
