@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import {
   StylesProvider,
@@ -27,6 +27,8 @@ const generateClassName = createGenerateClassName({
 // otherwise we can have some nasty bugs due to race conditions -
 // different Browser Histories are implemented differently in various libraries
 export default () => {
+  const [isSignedIn, setIsSignedIn] = useState(false);
+
   return (
     // BrowseRouter also creates Browser History object behind the scene
     // When we go to localhost://8080/ we create to separate objects of history - Browser and Memory
@@ -36,13 +38,28 @@ export default () => {
       {/* in order to generate css classes in a slightly more randomize fashion */}
       <StylesProvider generateClassName={generateClassName}>
         <div>
-          <Header />
+          <Header
+            onSignOut={() => setIsSignedIn(false)}
+            isSignedIn={isSignedIn}
+          />
           <h1>Hi, from the container!</h1>
           <hr />
           <Suspense fallback={<Progress />}>
             <Switch>
-              <Route path="/auth" component={AuthLazy} />
-              <Route path="/" component={MarketingLazy} />
+              {/* <Route path="/auth" component={AuthLazy} /> */}
+              {/* <Route path="/" component={MarketingLazy} /> */}
+              {/* Change syntax to pass props */}
+              <Route path="/auth">
+                <AuthLazy
+                  onSignIn={() => {
+                    console.log("User signed in");
+                    setIsSignedIn(true);
+                  }}
+                />
+              </Route>
+              <Route path="/">
+                <MarketingLazy isSignedIn={isSignedIn} />
+              </Route>
             </Switch>
           </Suspense>
         </div>

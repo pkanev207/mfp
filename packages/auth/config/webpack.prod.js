@@ -9,6 +9,7 @@ const prodConfig = {
     filename: "[name].[contenthash].js",
     //wtf?
     publicPath: "/packages/auth/src/bootstrap.js",
+    // publicPath: "/auth/latest/",
   },
   plugins: [
     // although identical with webpack.dev, in future there might be some differences
